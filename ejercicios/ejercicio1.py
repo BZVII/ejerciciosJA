@@ -16,4 +16,42 @@ Y te tiene que imprimir lo siguiente
 
 '''
 
+import sqlite3
+
+
+def calculo1():
+    conexion = sqlite3.connect("data/movimientos.db")
+    cur = conexion.cursor()
+    cur.execute("select sum(cantidad_from) from movimientos where moneda_from = 'EUR'")
+    print(cur.description)
+
+    filas = cur.fetchall()
+    valor = filas[0][0]
+
+    conexion.close()
+    return valor
+
+def calculo2():
+    conexion = sqlite3.connect("data/movimientos.db")
+    cur = conexion.cursor()
+    cur.execute("select sum(cantidad_to) from movimientos where moneda_to = 'EUR'")
+    print(cur.description)
+
+    filas = cur.fetchall()
+    valor = filas[0][0]
+    conexion.close()
+    return valor
+
+
+
+euros_from = calculo1()
+euros_to = calculo2()
+atrapado = euros_to - euros_from
+
+print("+------------------------+")
+print("| Gastado...:  {} € |".format(euros_from))
+print("| Recuperado: {} € |".format(euros_to))
+print("+------------------------+")
+print("| Atrapado..:  {} € |".format(atrapado))
+print("+------------------------+")
 
